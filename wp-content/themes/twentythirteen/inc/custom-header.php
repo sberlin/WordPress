@@ -27,8 +27,9 @@ function twentythirteen_custom_header_setup() {
 		'default-image'          => '%s/images/headers/circle.png',
 
 		// Set height and width, with a maximum value for the width.
-		'height'                 => 230,
-		'width'                  => 1600,
+		'height'                 => 258, // 230,
+		'width'                  => 900, // 1600,
+		'flex-height'		 => true,
 
 		// Callbacks for styling the header and the admin preview.
 		'wp-head-callback'       => 'twentythirteen_header_style',

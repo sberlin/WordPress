@@ -16,7 +16,8 @@
 
 			<div class="site-info">
 				<?php do_action( 'twentythirteen_credits' ); ?>
-				<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'twentythirteen' ) ); ?>"><?php printf( __( 'Proudly powered by %s', 'twentythirteen' ), 'WordPress' ); ?></a>
+				<a href="<?php echo esc_url( __( home_url( '/datenschutz/' ), 'twentythirteen' ) ); ?>" title="<?php esc_attr_e( 'Datenschutzerkl&auml;rung', 'twentythirteen' ); ?>"><?php printf( __( 'Datenschutzerkl&auml;rung', 'twentythirteen' ) ); ?></a>&nbsp;&bull;
+				<a href="<?php echo esc_url( __( home_url( '/impressum/' ), 'twentythirteen' ) ); ?>" title="<?php esc_attr_e( 'Impressum', 'twentythirteen' ); ?>"><?php printf( __( 'Impressum', 'twentythirteen' ) ); ?></a>
 			</div><!-- .site-info -->
 		</footer><!-- #colophon -->
 	</div><!-- #page -->
