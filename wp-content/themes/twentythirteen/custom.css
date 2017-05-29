@@ -177,12 +177,8 @@ body .entry-content #accordion h6 {
 	margin: 12px 0px;
 }
 
-body .entry-content .accordion .ui-accordion-content .envira-gallery-wrap {
-	 max-height: 200px;
-}
-
-body .entry-content .accordion img.envira-gallery-image {
-	 width: 233px;
+body .entry-content .accordion .envira-gallery-item {
+	position: relative !important;
 }
 
 body .entry-content .two-side-by-side img {
