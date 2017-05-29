@@ -191,7 +191,7 @@ function twentythirteen_scripts_styles() {
 add_action( 'wp_enqueue_scripts', 'twentythirteen_scripts_styles' );
 
 function bm_scripts_styles() {
-        wp_enqueue_style( 'bm', get_template_directory_uri() . '/css/custom.css', array(), '2016-10-30' );
+        wp_enqueue_style( 'bm', get_template_directory_uri() . '/custom.css', array(), '2016-10-30' );
         wp_enqueue_style( 'jquery-ui', get_template_directory_uri() . '/css/jquery-ui.min.css', array(), '2016-09-14' );
         wp_enqueue_script( 'jquery-ui-core' );
         wp_enqueue_script( 'jquery-ui-accordion' );
