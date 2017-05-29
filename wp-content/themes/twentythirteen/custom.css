@@ -15,6 +15,10 @@ body .social {
 	margin: 5px 5px;
 }
 
+body .dont-break {
+	white-space: nowrap;
+}
+
 /**
  * 4.0 Header
  * ----------------------------------------------------------------------------
