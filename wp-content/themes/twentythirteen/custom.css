@@ -146,8 +146,12 @@ body .entry-meta a:hover {
 	color: #a51b23;
 }
 
-body .entry-meta {
+body .entry-meta > * {
 	display: none;
+}
+
+body .entry-meta.archive-meta .date {
+	display: unset;
 }
 
 body article.attachment .entry-header {
