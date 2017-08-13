@@ -297,6 +297,56 @@ function wp_ajax_autocomplete_user() {
 }
 
 /**
+ * Handles AJAX requests for community events
+ *
+ * @since 4.8.0
+ */
+function wp_ajax_get_community_events() {
+	require_once( ABSPATH . 'wp-admin/includes/class-wp-community-events.php' );
+
+	check_ajax_referer( 'community_events' );
+
+	$search         = isset( $_POST['location'] ) ? wp_unslash( $_POST['location'] ) : '';
+	$timezone       = isset( $_POST['timezone'] ) ? wp_unslash( $_POST['timezone'] ) : '';
+	$user_id        = get_current_user_id();
+	$saved_location = get_user_option( 'community-events-location', $user_id );
+	$events_client  = new WP_Community_Events( $user_id, $saved_location );
+	$events         = $events_client->get_events( $search, $timezone );
+	$ip_changed     = false;
+
+	if ( is_wp_error( $events ) ) {
+		wp_send_json_error( array(
+			'error' => $events->get_error_message(),
+		) );
+	} else {
+		if ( empty( $saved_location['ip'] ) && ! empty( $events['location']['ip'] ) ) {
+			$ip_changed = true;
+		} elseif ( isset( $saved_location['ip'] ) && ! empty( $events['location']['ip'] ) && $saved_location['ip'] !== $events['location']['ip'] ) {
+			$ip_changed = true;
+		}
+
+		/*
+		 * The location should only be updated when it changes. The API doesn't always return
+		 * a full location; sometimes it's missing the description or country. The location
+		 * that was saved during the initial request is known to be good and complete, though.
+		 * It should be left in tact until the user explicitly changes it (either by manually
+		 * searching for a new location, or by changing their IP address).
+		 *
+		 * If the location were updated with an incomplete response from the API, then it could
+		 * break assumptions that the UI makes (e.g., that there will always be a description
+		 * that corresponds to a latitude/longitude location).
+		 *
+		 * The location is stored network-wide, so that the user doesn't have to set it on each site.
+		 */
+		if ( $ip_changed || $search ) {
+			update_user_option( $user_id, 'community-events-location', $events['location'], true );
+		}
+
+		wp_send_json_success( $events );
+	}
+}
+
+/**
  * Ajax handler for dashboard widgets.
  *
  * @since 3.4.0
@@ -1497,7 +1547,10 @@ function wp_ajax_wp_link_ajax() {
 
 	$args['pagenum'] = ! empty( $_POST['page'] ) ? absint( $_POST['page'] ) : 1;
 
-	require(ABSPATH . WPINC . '/class-wp-editor.php');
+	if ( ! class_exists( '_WP_Editors', false ) ) {
+		require( ABSPATH . WPINC . '/class-wp-editor.php' );
+	}
+
 	$results = _WP_Editors::wp_link_query( $args );
 
 	if ( ! isset( $results ) )
@@ -3000,7 +3053,7 @@ function wp_ajax_parse_embed() {
 			$wp_scripts->done = array();
 		}
 		ob_start();
-		wp_print_scripts( 'wp-mediaelement' );
+		wp_print_scripts( array( 'mediaelement-vimeo', 'wp-mediaelement' ) );
 		$scripts = ob_get_clean();
 
 		$parsed = $styles . $html . $scripts;
@@ -3091,7 +3144,7 @@ function wp_ajax_parse_media_shortcode() {
 
 		wp_print_scripts( 'wp-playlist' );
 	} else {
-		wp_print_scripts( array( 'froogaloop', 'wp-mediaelement' ) );
+		wp_print_scripts( array( 'mediaelement-vimeo', 'wp-mediaelement' ) );
 	}
 
 	wp_send_json_success( array(
@@ -3305,6 +3358,8 @@ function wp_ajax_save_wporg_username() {
  * @since 4.6.0
  *
  * @see Theme_Upgrader
+ *
+ * @global WP_Filesystem_Base $wp_filesystem Subclass
  */
 function wp_ajax_install_theme() {
 	check_ajax_referer( 'updates' );
@@ -3412,6 +3467,8 @@ function wp_ajax_install_theme() {
  * @since 4.6.0
  *
  * @see Theme_Upgrader
+ *
+ * @global WP_Filesystem_Base $wp_filesystem Subclass
  */
 function wp_ajax_update_theme() {
 	check_ajax_referer( 'updates' );
@@ -3497,6 +3554,8 @@ function wp_ajax_update_theme() {
  * @since 4.6.0
  *
  * @see delete_theme()
+ *
+ * @global WP_Filesystem_Base $wp_filesystem Subclass
  */
 function wp_ajax_delete_theme() {
 	check_ajax_referer( 'updates' );
@@ -3565,6 +3624,8 @@ function wp_ajax_delete_theme() {
  * @since 4.6.0
  *
  * @see Plugin_Upgrader
+ *
+ * @global WP_Filesystem_Base $wp_filesystem Subclass
  */
 function wp_ajax_install_plugin() {
 	check_ajax_referer( 'updates' );
@@ -3664,6 +3725,8 @@ function wp_ajax_install_plugin() {
  * @since 4.2.0
  *
  * @see Plugin_Upgrader
+ *
+ * @global WP_Filesystem_Base $wp_filesystem Subclass
  */
 function wp_ajax_update_plugin() {
 	check_ajax_referer( 'updates' );
@@ -3767,6 +3830,8 @@ function wp_ajax_update_plugin() {
  * @since 4.6.0
  *
  * @see delete_plugins()
+ *
+ * @global WP_Filesystem_Base $wp_filesystem Subclass
  */
 function wp_ajax_delete_plugin() {
 	check_ajax_referer( 'updates' );

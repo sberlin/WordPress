@@ -13,8 +13,9 @@ require_once( dirname( __FILE__ ) . '/admin.php' );
 /** WordPress Translation Install API */
 require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
 
-if ( ! current_user_can( 'manage_sites' ) )
+if ( ! current_user_can( 'create_sites' ) ) {
 	wp_die( __( 'Sorry, you are not allowed to add sites to this network.' ) );
+}
 
 get_current_screen()->add_help_tab( array(
 	'id'      => 'overview',
@@ -244,7 +245,7 @@ if ( ! empty( $messages ) ) {
 			<td><input name="blog[email]" type="email" class="regular-text wp-suggest-user" id="admin-email" data-autocomplete-type="search" data-autocomplete-field="user_email" /></td>
 		</tr>
 		<tr class="form-field">
-			<td colspan="2"><?php _e( 'A new user will be created if the above email address is not in the database.' ) ?><br /><?php _e( 'The username and password will be mailed to this email address.' ) ?></td>
+			<td colspan="2"><?php _e( 'A new user will be created if the above email address is not in the database.' ) ?><br /><?php _e( 'The username and a link to set the password will be mailed to this email address.' ) ?></td>
 		</tr>
 	</table>
 
