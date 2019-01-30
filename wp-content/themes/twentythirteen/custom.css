@@ -150,6 +150,10 @@ body .entry-meta > * {
 	display: none;
 }
 
+body .entry-meta.archive-meta {
+	margin-top: 0;
+}
+
 body .entry-meta.archive-meta .date {
 	display: unset;
 }
@@ -426,7 +430,6 @@ body .entry-content {
 
 .partner img {
 	width: 300px;
-	float:left;
 }
 
 .partner p {
