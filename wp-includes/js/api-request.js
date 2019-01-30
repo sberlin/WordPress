@@ -8,8 +8,8 @@
  * - Sends the REST API nonce as a request header.
  * - Allows specifying only an endpoint namespace/path instead of a full URL.
  *
- * @namespace wp.apiRequest
  * @since     4.9.0
+ * @output wp-includes/js/api-request.js
  */
 
 ( function( $ ) {
@@ -23,7 +23,7 @@
 	apiRequest.buildAjaxOptions = function( options ) {
 		var url = options.url;
 		var path = options.path;
-		var namespaceTrimmed, endpointTrimmed;
+		var namespaceTrimmed, endpointTrimmed, apiRoot;
 		var headers, addNonceHeader, headerName;
 
 		if (
@@ -39,7 +39,16 @@
 			}
 		}
 		if ( typeof path === 'string' ) {
-			url = wpApiSettings.root + path.replace( /^\//, '' );
+			apiRoot = wpApiSettings.root;
+			path = path.replace( /^\//, '' );
+
+			// API root may already include query parameter prefix if site is
+			// configured to use plain permalinks.
+			if ( 'string' === typeof apiRoot && -1 !== apiRoot.indexOf( '?' ) ) {
+				path = path.replace( '?', '&' );
+			}
+
+			url = apiRoot + path;
 		}
 
 		// If ?_wpnonce=... is present, no need to add a nonce header.
@@ -82,6 +91,7 @@
 
 	apiRequest.transport = $.ajax;
 
+	/** @namespace wp */
 	window.wp = window.wp || {};
 	window.wp.apiRequest = apiRequest;
 } )( jQuery );

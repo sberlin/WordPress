@@ -9,11 +9,17 @@ body {
 
 /* Text meant only for screen readers */
 .screen-reader-text {
+	border: 0;
 	clip: rect(1px, 1px, 1px, 1px);
+	-webkit-clip-path: inset(50%);
+	clip-path: inset(50%);
 	height: 1px;
+	margin: -1px;
 	overflow: hidden;
-	position: absolute !important;
+	padding: 0;
+	position: absolute;
 	width: 1px;
+	word-wrap: normal !important;
 }
 
 /* Dashicons */
@@ -124,7 +130,6 @@ p.wp-embed-heading {
 	position: absolute;
 	top: 50%;
 	left: 0;
-	-webkit-transform: translateY(-50%);
 	transform: translateY(-50%);
 	height: 25px;
 	width: 25px;
@@ -234,7 +239,6 @@ p.wp-embed-heading {
 
 .wp-embed-share-dialog-content {
 	height: 100%;
-	-webkit-transform-style: preserve-3d;
 	transform-style: preserve-3d;
 	overflow: hidden;
 }
