@@ -155,7 +155,7 @@ body .entry-meta.archive-meta {
 }
 
 body .entry-meta.archive-meta .date {
-	display: unset;
+	display: inline-block;
 }
 
 body article.attachment .entry-header {
