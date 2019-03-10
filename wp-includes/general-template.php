@@ -16,10 +16,8 @@
  * "special".
  *
  * @since 1.5.0
- * @since 5.1.0 Added the return value.
  *
  * @param string $name The name of the specialised header.
- * @return string The template filename if one is located.
  */
 function get_header( $name = null ) {
 	/**
@@ -40,7 +38,7 @@ function get_header( $name = null ) {
 
 	$templates[] = 'header.php';
 
-	return locate_template( $templates, true );
+	locate_template( $templates, true );
 }
 
 /**
@@ -53,10 +51,8 @@ function get_header( $name = null ) {
  * "special".
  *
  * @since 1.5.0
- * @since 5.1.0 Added the return value.
  *
  * @param string $name The name of the specialised footer.
- * @return string The template filename if one is located.
  */
 function get_footer( $name = null ) {
 	/**
@@ -77,7 +73,7 @@ function get_footer( $name = null ) {
 
 	$templates[] = 'footer.php';
 
-	return locate_template( $templates, true );
+	locate_template( $templates, true );
 }
 
 /**
@@ -90,10 +86,8 @@ function get_footer( $name = null ) {
  * "special".
  *
  * @since 1.5.0
- * @since 5.1.0 Added the return value.
  *
  * @param string $name The name of the specialised sidebar.
- * @return string The template filename if one is located.
  */
 function get_sidebar( $name = null ) {
 	/**
@@ -114,7 +108,7 @@ function get_sidebar( $name = null ) {
 
 	$templates[] = 'sidebar.php';
 
-	return locate_template( $templates, true );
+	locate_template( $templates, true );
 }
 
 /**
@@ -134,11 +128,9 @@ function get_sidebar( $name = null ) {
  * "special".
  *
  * @since 3.0.0
- * @since 5.1.0 Added the return value.
  *
  * @param string $slug The slug name for the generic template.
  * @param string $name The name of the specialised template.
- * @return string The template filename if one is located.
  */
 function get_template_part( $slug, $name = null ) {
 	/**
@@ -162,7 +154,7 @@ function get_template_part( $slug, $name = null ) {
 
 	$templates[] = "{$slug}.php";
 
-	return locate_template( $templates, true, false );
+	locate_template( $templates, true, false );
 }
 
 /**
@@ -2013,7 +2005,6 @@ function get_calendar( $initial = true, $echo = true ) {
 	}
 	// week_begins = 0 stands for Sunday
 	$week_begins = (int) get_option( 'start_of_week' );
-	$ts          = current_time( 'timestamp' );
 
 	// Let's figure out when we are
 	if ( ! empty( $monthnum ) && ! empty( $year ) ) {
@@ -2033,8 +2024,8 @@ function get_calendar( $initial = true, $echo = true ) {
 			$thismonth = zeroise( (int) substr( $m, 4, 2 ), 2 );
 		}
 	} else {
-		$thisyear  = gmdate( 'Y', $ts );
-		$thismonth = gmdate( 'm', $ts );
+		$thisyear  = current_time( 'Y' );
+		$thismonth = current_time( 'm' );
 	}
 
 	$unixmonth = mktime( 0, 0, 0, $thismonth, 1, $thisyear );
@@ -2144,9 +2135,9 @@ function get_calendar( $initial = true, $echo = true ) {
 		}
 		$newrow = false;
 
-		if ( $day == gmdate( 'j', $ts ) &&
-			$thismonth == gmdate( 'm', $ts ) &&
-			$thisyear == gmdate( 'Y', $ts ) ) {
+		if ( $day == current_time( 'j' ) &&
+			$thismonth == current_time( 'm' ) &&
+			$thisyear == current_time( 'Y' ) ) {
 			$calendar_output .= '<td id="today">';
 		} else {
 			$calendar_output .= '<td>';
